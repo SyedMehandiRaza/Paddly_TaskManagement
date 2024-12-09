@@ -1,11 +1,29 @@
-import Cards from "../components/Home/Cards"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cards from "../components/Home/Cards";
 
 const ImportantTask = () => {
+  const [Data, setData] = useState();
+  const headers = {
+    id: localStorage.getItem("id"),
+    authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
+  useEffect(() => {
+    const fetch = async () => {
+      const response = await axios.get(
+        "http://localhost:3000/api/v2/get-imp-tasks",
+        { headers }
+      );
+      setData(response.data.data);
+    };
+    fetch();
+  });
+
   return (
     <div>
-      <Cards home={"false"} />
+      <Cards home={"false"} data={Data} />
     </div>
-  )
-}
+  );
+};
 
-export default ImportantTask
+export default ImportantTask;
